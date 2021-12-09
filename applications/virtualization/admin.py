@@ -220,7 +220,7 @@ class ProjectAdmin(NestedModelAdmin):
     list_display = ['project_title', 'slug', 'country', 'provider', 'vm_count', 'net_count', 'state']
     save_on_top = True
     search_fields = ['project_title']
-    inlines = [VMInline, NetworkInline, DescriptorInline, TodoInline, ]
+    inlines = [NetworkInline, VMInline, DescriptorInline, TodoInline, ]
 
 admin.site.register(Project, ProjectAdmin)
 admin.site.register(Provider)

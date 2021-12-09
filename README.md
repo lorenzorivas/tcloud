@@ -1,10 +1,10 @@
 "# tcloud"
 
 ```python
+> source /bin/active
 > pip install -r requirements.txt
-> python manage.py showmigrations
-> python manage.py migrate --fake virtualization zero
-> python manage.py showmigrations
+> find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
+> find . -path "*/migrations/*.pyc"  -delete
 > python manage.py makemigrations
 > python manage.py migrate
 ```

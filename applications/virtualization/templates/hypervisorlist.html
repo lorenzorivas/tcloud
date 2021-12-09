@@ -4,11 +4,16 @@
 
 {% block body %}
 <main class="container">
-  <div class="d-flex align-items-center p-3 my-3 text-white bg-purple rounded shadow-sm">
-    <div class="lh-1">
-      <h1 class="h6 mb-0 text-white lh-1">Lista de Tenant</h1>
-      <small>TCLOUD</small>
-    </div>
+  <div class="d-flex align-items-center p-3 my-3 text-white bg-dark rounded shadow-sm">
+    <ul class="nav nav-pills nav-fill">
+      <li class="nav-item">
+        <a class="nav-link disabled h6 mb-0 text-white lh-1">Tenants y Servidores TCLOUD</a>
+      </li>
+      <li class="nav-item">
+        <a href="{% url 'admin:virtualization_tenant_add' %}">
+          <button type="button" class="btn btn-primary btn-sm">Agregar</button></a>
+      </li>
+    </ul>
   </div>
 
   <div class="my-3 p-3 bg-body rounded shadow-sm">
