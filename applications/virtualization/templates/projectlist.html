@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% block body %}
+
+<main class="container">
+  <div class="d-flex align-items-center p-3 my-3 text-white bg-purple rounded shadow-sm">
+    <div class="lh-1">
+      <h1 class="h6 mb-0 text-white lh-1">Lista de Proyectos</h1>
+      <small>TCLOUD</small>
+    </div>
+  </div>
+
+  <div class="my-3 p-3 bg-body rounded shadow-sm">
+    <div class="table-responsive">
+
+      {% for project in object_list %}
+      <a href="{% url 'virtualization:projectdetail' project.slug %}" class="text-decoration-none">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">
+
+              {{ project.project_title|upper }}
+              {{ project.country.name|upper}}
+
+          </h5>
+          <p class="card-text">
+            <div class="progress">
+                {% if project.todo_done == 100 %}
+                <div class="progress-bar progress-bar-striped progress-bar-animated massive-font"
+                     role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0"
+                     aria-valuemax="100">
+                    Proyecto completado
+                </div>
+                {% else %}
+                <div class="progress-bar progress-bar-striped progress-bar-animated massive-font"
+                     role="progressbar" style="width: {{project.todo_done|floatformat:0|intcomma}}%"
+                     aria-valuenow="{{project.todo_done|floatformat:0|intcomma}}" aria-valuemin="0"
+                     aria-valuemax="100">
+                    {{ project.todo_done|floatformat:0|intcomma}}%
+                </div>
+                {% endif %}
+
+            </div>
+        </div>
+      </a>
+      <br>
+      {% endfor %}
+
+    </div>
+  </div>
+</main>
+{% endblock %}
