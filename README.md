@@ -1,11 +1,18 @@
 "# tcloud"
 
-pip install -r requirements.txt
+```python
+> pip install -r requirements.txt
+> python manage.py showmigrations
+> python manage.py migrate --fake virtualization zero
+> python manage.py showmigrations
+> python manage.py makemigrations
+> python manage.py migrate
+```
 
 Local
 
 ```python
-echo "# cmapp" >> README.md
+echo "# tcloud" >> README.md
 git init
 git add README.md
 git commit -m "first commit"
