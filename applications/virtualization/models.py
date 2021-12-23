@@ -95,7 +95,7 @@ class VM(models.Model):
     internal_disk_total = models.IntegerField(null=True, verbose_name='Disco IN')
     external_disk_total = models.IntegerField(null=True, blank=True, verbose_name='Disco EX')
     tenant = models.ForeignKey(Tenant, on_delete=models.CASCADE, null=True, blank=True)
-    site = models.ForeignKey(Site, on_delete=models.CASCADE)
+    # site = models.ForeignKey(Site, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.vm_name

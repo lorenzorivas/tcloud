@@ -186,168 +186,181 @@ img {
         </div>
       </div>
 
-      <h2>Tareas</h2>
-      <div class="progress">
-          {% if get_percentage_done == 100 %}
-          <div class="progress-bar progress-bar-striped progress-bar-animated massive-font"
-               role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0"
-               aria-valuemax="100">
-              100% - todas las tareas completadas
-          </div>
-          {% else %}
-          <div class="progress-bar progress-bar-striped progress-bar-animated massive-font"
-               role="progressbar" style="width: {{get_percentage_done|floatformat:0|intcomma}}%"
-               aria-valuenow="{{get_percentage_done|floatformat:0|intcomma}}" aria-valuemin="0"
-               aria-valuemax="100">
-              {{ get_percentage_done|floatformat:0|intcomma}}%
-          </div>
-          {% endif %}
-
-      </div>
+      <h2 data-bs-toggle="collapse" href="#collapseTASK">Tareas</h2>
       <br>
-      <div class="table-responsive">
-        <table class="table table-striped table-sm" id="sortTableTask">
-          <thead>
-            <tr>
-              <th scope="col">Titulo</th>
-              <th scope="col">Responsable</th>
-              <th scope="col">Estado</th>
-              <th scope="col">Planificada</th>
-              <th scope="col">Terminada</th>
-              <th scope="col">Analisis</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for todo in object.todo_set.all %}
-            <tr>
-              <td>{{ todo.todo_title }}</td>
-              <td>{{ todo.collaborator.user.first_name }} {{todo.collaborator.user.last_name }}</td>
-              <td>
-                {% if todo.state == True %}
-                Terminada
-                {% else %}
-                <div class="custom-control custom-checkbox">
-                    <form class="" action="{% url 'virtualization:todofinished' todo.id %}" method="post">
-                        {% csrf_token %}
-                        <input onChange="this.form.submit()" type="radio">
-                    </form>
-                </div>
-                {% endif %}
-              </td>
-              <td>W{{ todo.deadline_date|date:"W" }}
-              [{{ todo.deadline_date|date:"Y" }}]</td>
-              <td>{{ todo.done_date|date:"M/d/Y" }}</td>
-              <td>
-                {% if todo.diff_days == True %}
-                <i class="fa fa-clock text-info"></i> en tiempo
-                {% elif todo.diff_days == False %}
-                <i class="fa fa-clock text-warning"></i> terminada atrasada
-                {% else %}
+      <div class="collapse show" id="collapseTASK">
+        <div class="progress">
+            {% if get_percentage_done == 100 %}
+            <div class="progress-bar progress-bar-striped progress-bar-animated massive-font"
+                 role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0"
+                 aria-valuemax="100">
+                100% - todas las tareas completadas
+            </div>
+            {% else %}
+            <div class="progress-bar progress-bar-striped progress-bar-animated massive-font"
+                 role="progressbar" style="width: {{get_percentage_done|floatformat:0|intcomma}}%"
+                 aria-valuenow="{{get_percentage_done|floatformat:0|intcomma}}" aria-valuemin="0"
+                 aria-valuemax="100">
+                {{ get_percentage_done|floatformat:0|intcomma}}%
+            </div>
+            {% endif %}
 
-                {% endif %}
-              </td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-    </div>
+        </div>
+          <br>
+          <div class="table-responsive">
+            <table class="table table-striped table-sm" id="sortTableTask">
+              <thead>
+                <tr>
+                  <th scope="col">Titulo</th>
+                  <th scope="col">Responsable</th>
+                  <th scope="col">Estado</th>
+                  <th scope="col">Planificada</th>
+                  <th scope="col">Terminada</th>
+                  <th scope="col">Analisis</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for todo in object.todo_set.all %}
+                <tr>
+                  <td>{{ todo.todo_title }}</td>
+                  <td>{{ todo.collaborator.user.first_name }} {{todo.collaborator.user.last_name }}</td>
+                  <td>
+                    {% if todo.state == True %}
+                    Terminada
+                    {% else %}
+                    <div class="custom-control custom-checkbox">
+                        <form class="" action="{% url 'virtualization:todofinished' todo.id %}" method="post">
+                            {% csrf_token %}
+                            <input onChange="this.form.submit()" type="radio">
+                        </form>
+                    </div>
+                    {% endif %}
+                  </td>
+                  <td>W{{ todo.deadline_date|date:"W" }}
+                  [{{ todo.deadline_date|date:"Y" }}]</td>
+                  <td>{{ todo.done_date|date:"M/d/Y" }}</td>
+                  <td>
+                    {% if todo.diff_days == True %}
+                    <i class="fa fa-clock text-info"></i> en tiempo
+                    {% elif todo.diff_days == False %}
+                    <i class="fa fa-clock text-warning"></i> terminada atrasada
+                    {% else %}
 
-      <h2>Resumen y Objetivos</h2>
-      <br>
-      {{ project.resume|safe }}
-
-      <h2>Asignación de VM</h2>
-      <br>
-      <div class="table-responsive">
-        <table class="table table-striped table-sm" id="sortTableVM">
-          <thead>
-            <tr>
-              <th scope="col">Nombre</th>
-              <th scope="col">Puertos</th>
-              <th scope="col">vCPU</th>
-              <th scope="col">RAM</th>
-              <th scope="col">InternalDISK</th>
-              <th scope="col">ExternalDISK</th>
-              <th scope="col">Tenant</th>
-              <th scope="col">Sitio</th>
-              <th scope="col">Estado</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for vm in object.vm_set.all %}
-            <tr>
-              <td>TC-{{vm.site}}-{{vm.vm_name}}</td>
-              <td>
-                {% for port in vm.port_set.all %}
-                <li>{{port.network.network_name}} [{{port}}]</li>
-                {% empty %}
-                <li>sin asignación</li>
+                    {% endif %}
+                  </td>
+                </tr>
                 {% endfor %}
-              </td>
-              <td>{{vm.vcpu_total}}</td>
-              <td>{{vm.ram_total}}GB</td>
-              <td>{{vm.internal_disk_total}}GB</td>
-              <td>
-                {% if vm.external_disk_total == None %}
-                sin asignación
-                {% else %}
-                {{vm.external_disk_total}}
-                {% endif %}
-              </td>
-              <td>{{vm.tenant}}</td>
-              <td>{{vm.site}}</td>
-              <td>
-                {% if vm.state == False %}
-                en proceso
-                {% else %}
-                operativo
-                {% endif %}
-              </td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+              </tbody>
+            </table>
+        </div>
       </div>
 
-      <h2>Asignación RED</h2>
+      <h2 data-bs-toggle="collapse" href="#collapseRES">Resumen y Objetivos</h2>
       <br>
-      <div class="table-responsive">
-        <table class="table table-striped table-sm" id="sortTableNET">
-          <thead>
-            <tr>
-              <th scope="col">Nombre</th>
-              <th scope="col">Red</th>
-              <th scope="col">VLAN</th>
-              <th scope="col">VRRP VIP</th>
-              <th scope="col">VRRP R1</th>
-              <th scope="col">VRRP R2</th>
-              <th scope="col">VRF</th>
-              <th scope="col">Sitio</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for net in object.network_set.all %}
-            <tr>
-              <td>TC-{{net.site}}-NET-{{net.network_name|upper}}</td>
-              <td>{{net.ip_address_mask}}</td>
-              <td>{{net.vlan_id}}</td>
-              <td>{{net.vrrp_vip}}</td>
-              <td>{{net.vrrp_r1}}</td>
-              <td>{{net.vrrp_r2}}</td>
-              <td>{{net.vrf_name}}</td>
-              <td>{{net.site}}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+      <div class="collapse show" id="collapseRES">
+      {{ project.resume|safe }}
       </div>
-      <h2>Descriptores</h2>
+
+      <h2 data-bs-toggle="collapse" href="#collapseVMS">Asignación de VM</h2>
       <br>
-      <div class="btn-group" role="group" aria-label="Basic example">
-        {% for descriptor in object.descriptor_set.all %}
-          <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#modal_{{descriptor.id}}">{{descriptor.descriptor_name}}</button>
-        {% endfor %}
+      <div class="collapse show" id="collapseVMS">
+        <div class="table-responsive">
+          <table class="table table-striped table-sm" id="sortTableVM">
+            <thead>
+              <tr>
+                <th scope="col">Nombre</th>
+                <th scope="col">Puertos</th>
+                <th scope="col">vCPU</th>
+                <th scope="col">RAM</th>
+                <th scope="col">InternalDISK</th>
+                <th scope="col">ExternalDISK</th>
+                <th scope="col">Tenant</th>
+                <th scope="col">Sitio</th>
+                <th scope="col">Estado</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for vm in object.vm_set.all %}
+              <tr>
+                <td><b>{{vm.tenant.site}}</b>-{{vm.vm_name}}</td>
+                <td>
+                  {% for port in vm.port_set.all %}
+                  <li><b>{{port.network.network_name}}</b> {{port}} </li>
+                  {% empty %}
+                  <li>sin asignación</li>
+                  {% endfor %}
+                </td>
+                <td>{{vm.vcpu_total}}</td>
+                <td>{{vm.ram_total}}GB</td>
+                <td>{{vm.internal_disk_total}}GB</td>
+                <td>
+                  {% if vm.external_disk_total == None %}
+                  sin asignación
+                  {% else %}
+                  {{vm.external_disk_total}}
+                  {% endif %}
+                </td>
+                <td>{{vm.tenant}}</td>
+                <td>{{vm.tenant.site}}</td>
+                <td>
+                  {% if vm.state == False %}
+                  en proceso
+                  {% else %}
+                  operativo
+                  {% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
       </div>
+
+
+      <h2 data-bs-toggle="collapse" href="#collapseNET">Asignación RED</h2>
+      <br>
+      <div class="collapse show" id="collapseNET">
+        <div class="table-responsive">
+          <table class="table table-striped table-sm" id="sortTableNET">
+            <thead>
+              <tr>
+                <th scope="col">Nombre</th>
+                <th scope="col">Red</th>
+                <th scope="col">VLAN</th>
+                <th scope="col">VRRP VIP</th>
+                <th scope="col">VRRP R1</th>
+                <th scope="col">VRRP R2</th>
+                <th scope="col">VRF</th>
+                <th scope="col">Sitio</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for net in object.network_set.all %}
+              <tr>
+                <td><b>{{net.site}}</b>_{{net.network_name|upper}}</td>
+                <td>{{net.ip_address_mask}}</td>
+                <td>{{net.vlan_id}}</td>
+                <td>{{net.vrrp_vip}}</td>
+                <td>{{net.vrrp_r1}}</td>
+                <td>{{net.vrrp_r2}}</td>
+                <td>{{net.vrf_name}}</td>
+                <td>{{net.site}}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <h2 data-bs-toggle="collapse" href="#collapseDES">Descriptores</h2>
+      <br>
+      <div class="collapse show" id="collapseDES">
+        <div class="btn-group" role="group" aria-label="Basic example">
+          {% for descriptor in object.descriptor_set.all %}
+            <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#modal_{{descriptor.id}}">{{descriptor.descriptor_name}}</button>
+          {% endfor %}
+        </div>
+      </div>
+
 
       <!-- Modal Descriptores-->
       {% for descriptor in object.descriptor_set.all %}

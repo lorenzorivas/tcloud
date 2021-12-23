@@ -89,6 +89,7 @@ admin.site.register(Todo, TodoAdmin)
 class PortInline(NestedTabularInline):
     model = Port
     extra = 0
+    inline_classes = ('collapse', 'close',)
     autocomplete_fields = ['network', 'network__project__project_title']
     search_fields = ['network__network_name',]
 
@@ -132,8 +133,10 @@ class VMAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 
     model = VM
     resources_class = VMResources
-    list_display = ['vm_name', 'project', 'date_format', 'vcpu_total', 'ram_total', 'internal_disk_total', 'external_disk_total', 'tenant', 'site', 'link']
-    list_filter = [SiteFilter, TenantFilter]
+    # list_display = ['vm_name', 'project', 'date_format', 'vcpu_total', 'ram_total', 'internal_disk_total', 'external_disk_total', 'tenant', 'site', 'link']
+    list_display = ['vm_name', 'project', 'date_format', 'vcpu_total', 'ram_total', 'internal_disk_total', 'external_disk_total', 'tenant', 'link']
+
+    list_filter = [TenantFilter, 'tenant__site']
     autocomplete_fields = ['tenant', ]
 
 admin.site.register(VM, VMAdmin)
